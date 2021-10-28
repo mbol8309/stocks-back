@@ -10,7 +10,8 @@ class Category extends Model
 {
     use HasFactory,SoftDeletes;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name','parent_id'];
+    protected $perPage = 10;
 
     public function children()
     {
