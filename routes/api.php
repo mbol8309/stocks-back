@@ -16,10 +16,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login',[AuthController::class,'login']);
+//Route::post('login',[AuthController::class,'login']);
 
 //add this middleware to ensure that every request is authenticated
-Route::middleware('auth:api')->group(function(){
+/*Route::middleware('auth:api')->group(function(){
     Route::get('user', [AuthController::class,'authenticatedUserDetails']);
 
     Route::prefix('category')->group(function(){
@@ -28,6 +28,6 @@ Route::middleware('auth:api')->group(function(){
         Route::put('/{id}',[CategoryController::class,'update'])->whereNumber('id');
         Route::delete('/{id}',[CategoryController::class,'delete'])->whereNumber('id');
     });
-});
+});*/
 
 

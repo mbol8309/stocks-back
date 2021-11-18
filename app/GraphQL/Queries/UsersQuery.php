@@ -2,7 +2,6 @@
 namespace App\GraphQL\Queries;
 
 use Rebing\GraphQL\Support\Facades\GraphQL;
-use Rebing\GraphQL\Support\Query;
 use Rebing\GraphQL\Support\SelectFields;
 use GraphQL\Type\Definition\Type;
 use App\Models\User;
@@ -14,11 +13,6 @@ class UsersQuery extends Query {
     protected $attributes = [
         'name'  => 'users',
     ];
-
-    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
-    {
-        return true;
-    }
 
     public function type(): Type
     {

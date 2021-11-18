@@ -2,7 +2,6 @@
 namespace App\GraphQL\Queries;
 
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Query;
 use Rebing\GraphQL\Support\SelectFields;
 use App\Models\User;
 use Closure;
@@ -14,11 +13,6 @@ class UserQuery extends Query {
     protected $attributes = [
         'name'  => 'user',
     ];
-
-    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
-    {
-        return true;
-    }
 
     public function type(): Type
     {
@@ -47,8 +41,8 @@ class UserQuery extends Query {
         ];
     }
 
-    public function resolve($root, $args, ?SelectFields $fields)
-    {
+    public function resolve($root, $args, User $user, ?SelectFields $fields)
+    {   
         return User::findOrFail($args['id']);
     }
 

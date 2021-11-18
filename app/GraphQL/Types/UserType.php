@@ -5,6 +5,7 @@ use GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 use GraphQL\Type\Definition\Type;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserType extends GraphQLType {
 
@@ -12,6 +13,7 @@ class UserType extends GraphQLType {
         'name'          => 'User', //defining the GraphQL type name
         'description'   => 'A User', //providing a description for the GraphQL type name
         'model'         => User::class, //mapping the GraphQL type to the Laravel model
+        'token'         => 'AccessToken'
     ];
 
     public function fields(): array
@@ -32,6 +34,13 @@ class UserType extends GraphQLType {
                 'type'          => Type::nonNull(Type::string()),
                 'description'   => 'Email of the user',
             ],
+            'token' => [
+                'type'          => Type::string(),
+                'token'         => 'Token of the user',
+                'privacy'       => function(array $args, $ctx): bool {
+                    return isset($args['id']) && $args['id'] == Auth::id();
+                }
+            ]
         ];
     }
 }

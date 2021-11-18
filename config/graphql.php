@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\GraphQL\Queries\UserLoginQuery;
+
 return [
     // The prefix for routes
     'prefix' => 'graphql',
@@ -39,7 +41,7 @@ return [
     'controllers' => \Rebing\GraphQL\GraphQLController::class . '@query',
 
     // Any middleware for the graphql route group
-    'middleware' => [],
+    'middleware' => ['respond.json'],
 
     // Additional route group attributes
     //
@@ -100,10 +102,12 @@ return [
     //  ]
     //
     'schemas' => [
+        
         'default' => [
             'query' => [
                 //retrieve a single user
                 'user' => App\GraphQL\Queries\UserQuery::class,
+                'me' => App\GraphQL\Queries\UserMeQuery::class,
                 //retrieve a collection of users
                 'users' => App\GraphQL\Queries\UsersQuery::class,
                 'category' => App\GraphQL\Queries\CategoryQuery::class,
@@ -119,8 +123,17 @@ return [
             'types' => [
                 // ExampleType::class,
             ],
-            'middleware' => [],
+            'middleware' => ['auth:api'],
             'method' => ['get', 'post'],
+        ],
+        'login' => [
+            'query' => [
+                'login' => UserLoginQuery::class
+            ],
+            'mutations' => [],
+            'types' => [],
+            'middleware' => ['api'],
+            'method' => ['get','post']
         ],
     ],
 
