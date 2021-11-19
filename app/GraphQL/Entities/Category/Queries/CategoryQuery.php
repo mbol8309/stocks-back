@@ -48,7 +48,7 @@ class CategoryQuery extends Query {
         ];
     }
 
-    public function resolve($root, $args, ?SelectFields $fields)
+    public function resolve($root, $args,$user, ?SelectFields $fields)
     {
         return Category::findOrFail($args['id']);
     }

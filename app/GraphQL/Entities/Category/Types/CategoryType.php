@@ -1,6 +1,8 @@
 <?php
 namespace App\GraphQL\Entities\Category\Types;
 
+use App\GraphQL\Entities\Category\CategoryResolver;
+use App\GraphQL\Entities\User\Types\UserType;
 use Rinvex\Categories\Models\Category;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 use GraphQL\Type\Definition\Type;
@@ -37,7 +39,11 @@ class CategoryType extends GraphQLType {
             ],
             'children' => [
                 'type'      =>  Type::listOf(GraphQL::type('Category'))
-            ]
+            ],
+            'users' => new CategoryResolver([
+                'type' => 'User',
+                'class' => User::class
+            ])
         ];
     }
 }
