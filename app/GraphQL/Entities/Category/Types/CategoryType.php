@@ -1,10 +1,12 @@
 <?php
-namespace App\GraphQL\Types;
+namespace App\GraphQL\Entities\Category\Types;
 
-use App\Models\Category;
+use Rinvex\Categories\Models\Category;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 use GraphQL\Type\Definition\Type;
 use App\Models\User;
+use GraphQL\GraphQL as GraphQLGraphQL;
+use Rebing\GraphQL\GraphQL as RebingGraphQLGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class CategoryType extends GraphQLType {
@@ -33,6 +35,9 @@ class CategoryType extends GraphQLType {
                 'type'          => GraphQL::type('Category'),
                 'description'   => 'Parent category',
             ],
+            'children' => [
+                'type'      =>  Type::listOf(GraphQL::type('Category'))
+            ]
         ];
     }
 }

@@ -1,18 +1,18 @@
 <?php
-namespace App\GraphQL\Mutations;
+namespace App\GraphQL\Entities\User\Mutations;
 
+use App\GraphQL\Mutations\Mutation;
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Mutation;
 use Illuminate\Validation\Rule;
 use App\Models\User;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class UpdateUserMutation extends Mutation
+class CreateUserMutation extends Mutation
 {
     protected $attributes = [
-        'name' => 'updateUser'
+        'name' => 'createUser'
     ];
 
     public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
@@ -23,22 +23,22 @@ class UpdateUserMutation extends Mutation
     public function rules(array $args = []):array
     {
         return [
-            'id' => [
-                'required', 'numeric', 'min:1', 'exists:users,id'
-            ],
             'name' => [
                 'required', 'max:50'
             ],
             'email' => [
-                'required', 'email', 'unique:users,email,'.$args['id'],
+                'required', 'email', 'unique:users,email',
             ],
             'password' => [
-                'sometimes', 'string', 'min:5'
+                'required', 'string', 'min:5'
             ],
+            'categories' => [
+                'sometimes', 'array', 'exists:categories,id'
+            ]
         ];
     }
 
-    public function type() :Type
+    public function type() : Type
     {
         return GraphQL::type('User');
     }
@@ -46,10 +46,6 @@ class UpdateUserMutation extends Mutation
     public function args():array
     {
         return [
-            'id' => [
-                'name' => 'id',
-                'type' =>  Type::nonNull(Type::int()),
-            ],
             'name' => [
                 'name' => 'name',
                 'type' =>  Type::nonNull(Type::string()),
@@ -62,14 +58,22 @@ class UpdateUserMutation extends Mutation
                 'name' => 'password',
                 'type' =>  Type::nonNull(Type::string()),
             ],
+            'categories' => [
+                'name' => 'Categories',
+                'type' => Type::listOf(GraphQL::type('Category'))
+            ]
         ];
     }
 
     public function resolve($root, $args)
     {
-        $user = User::findOrFail($args['id']);
+        $user = new User();
         $user->fill($args);
         $user->save();
+        if (isset($args['categories']))
+        {
+            $user->syncCategories($args['categories']);
+        }
 
         return $user;
     }

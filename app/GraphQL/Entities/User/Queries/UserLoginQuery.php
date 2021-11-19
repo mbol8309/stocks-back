@@ -1,7 +1,8 @@
 <?php
 
-namespace App\GraphQL\Queries;
+namespace App\GraphQL\Entities\User\Queries;
 
+use App\GraphQL\Queries\Query;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\SelectFields;
 use App\Models\User;

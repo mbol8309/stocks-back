@@ -9,6 +9,6 @@ abstract class Query extends BaseQuery
 {
     public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
     {
-        return false;
+        return true;
     }
 }

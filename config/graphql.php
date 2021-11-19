@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\GraphQL\GraphQLEntitiesManager;
 use App\GraphQL\Queries\UserLoginQuery;
 
 return [
@@ -101,7 +102,7 @@ return [
     //      ],
     //  ]
     //
-    'schemas' => [
+    'schemas' => GraphQLEntitiesManager::parseSchemas(),/* [
         
         'default' => [
             'query' => [
@@ -111,6 +112,7 @@ return [
                 //retrieve a collection of users
                 'users' => App\GraphQL\Queries\UsersQuery::class,
                 'category' => App\GraphQL\Queries\CategoryQuery::class,
+                'categories' => App\GraphQL\Queries\CategoriesQuery::class,
             ],
             'mutation' => [
                 //create a user
@@ -135,7 +137,7 @@ return [
             'middleware' => ['api'],
             'method' => ['get','post']
         ],
-    ],
+    ],*/
 
     // The types available in the application. You can then access it from the
     // facade like this: GraphQL::type('user')
@@ -146,11 +148,8 @@ return [
     //     App\GraphQL\Type\UserType::class
     // ]
     //
-    'types' => [
-        //user type definition
-        'User' => App\GraphQL\Types\UserType::class,
-        'Category' => App\GraphQL\Types\CategoryType::class,
-    ],
+    'types' => GraphQLEntitiesManager::getGlobalTypes(),
+    
 
     // The types will be loaded on demand. Default is to load all types on each request
     // Can increase performance on schemes with many types

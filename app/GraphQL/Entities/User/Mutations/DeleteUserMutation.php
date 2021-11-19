@@ -1,10 +1,10 @@
 <?php
-namespace App\GraphQL\Mutations;
+namespace App\GraphQL\Entities\User\Mutations;
 
+use App\GraphQL\Mutations\Mutation;
 use GraphQL;
 
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Mutation;
 use App\Models\User;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;

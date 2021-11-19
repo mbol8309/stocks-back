@@ -1,19 +1,19 @@
 <?php
-namespace App\GraphQL\Mutations;
+namespace App\GraphQL\Entities\Category\Mutations;
 
-
+use App\GraphQL\Mutations\Mutation;
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Mutation;
 use Illuminate\Validation\Rule;
 use App\Models\User;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use Rebing\GraphQL\Support\Facades\GraphQL;
+use Rinvex\Categories\Models\Category;
 
-class CreateUserMutation extends Mutation
+class CreateCategoryMutation extends Mutation
 {
     protected $attributes = [
-        'name' => 'createUser'
+        'name' => 'createCategory'
     ];
 
     public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
@@ -27,18 +27,15 @@ class CreateUserMutation extends Mutation
             'name' => [
                 'required', 'max:50'
             ],
-            'email' => [
-                'required', 'email', 'unique:users,email',
-            ],
-            'password' => [
-                'required', 'string', 'min:5'
-            ],
+            'parent' => [
+                'integer', 'exists:categories,id'
+            ]
         ];
     }
 
     public function type() : Type
     {
-        return GraphQL::type('User');
+        return GraphQL::type('Category');
     }
 
     public function args():array
@@ -48,23 +45,27 @@ class CreateUserMutation extends Mutation
                 'name' => 'name',
                 'type' =>  Type::nonNull(Type::string()),
             ],
-            'email' => [
-                'name' => 'email',
-                'type' =>  Type::nonNull(Type::string()),
-            ],
-            'password' => [
-                'name' => 'password',
-                'type' =>  Type::nonNull(Type::string()),
-            ],
+            'parent' => [
+                'name' => 'parent',
+                'type' => Type::int(),
+            ]
         ];
     }
 
     public function resolve($root, $args)
     {
-        $user = new User();
-        $user->fill($args);
-        $user->save();
+        $category = new Category();
+        $category->fill($args);
 
-        return $user;
+        if (isset($args['parent']))
+        {
+            $category->parent_id = $args['parent'];
+        } else {
+            $category->makeRoot();
+        }
+
+        $category->save();
+
+        return $category;
     }
 }

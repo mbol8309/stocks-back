@@ -1,6 +1,8 @@
 <?php
-namespace App\GraphQL\Queries;
+namespace App\GraphQL\Entities\Category\Queries;
 
+use App\GraphQL\Queries\Query;
+use Rinvex\Categories\Models\Category;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\SelectFields;
 use App\Models\User;
@@ -8,15 +10,20 @@ use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class UserQuery extends Query {
+class CategoryQuery extends Query {
 
     protected $attributes = [
-        'name'  => 'user',
+        'name'  => 'category',
     ];
+
+    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
+    {
+        return true;
+    }
 
     public function type(): Type
     {
-        return GraphQL::type('User'); //retrieve a single user
+        return GraphQL::type('Category'); //retrieve a single user
     }
 
     protected function rules(array $args = []): array
@@ -26,7 +33,7 @@ class UserQuery extends Query {
                 'required',
                 'numeric',
                 'min:1',
-                'exists:users,id'
+                'exists:categories,id'
             ],
         ];
     }
@@ -41,9 +48,9 @@ class UserQuery extends Query {
         ];
     }
 
-    public function resolve($root, $args, User $user, ?SelectFields $fields)
-    {   
-        return User::findOrFail($args['id']);
+    public function resolve($root, $args, ?SelectFields $fields)
+    {
+        return Category::findOrFail($args['id']);
     }
 
 }
