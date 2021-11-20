@@ -7,7 +7,7 @@ use App\GraphQL\Queries\UserLoginQuery;
 
 return [
     // The prefix for routes
-    'prefix' => 'graphql',
+    'prefix' => 'api',
 
     // The routes to make GraphQL request. Either a string that will apply
     // to both query and mutation or an array containing the key 'query' and/or
@@ -245,7 +245,7 @@ return [
      */
     'apq' => [
         // Enable/Disable APQ - See https://www.apollographql.com/docs/apollo-server/performance/apq/#disabling-apq
-        'enable' => env('GRAPHQL_APQ_ENABLE', false),
+        'enable' => env('GRAPHQL_APQ_ENABLE', true),
 
         // The cache driver used for APQ
         'cache_driver' => env('GRAPHQL_APQ_CACHE_DRIVER', config('cache.default')),

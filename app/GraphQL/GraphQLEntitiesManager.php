@@ -87,7 +87,7 @@ class GraphQLEntitiesManager
             if (is_array($value)) {
                 $arrays[$key] = $value;
             } else {
-                array_push($strings, $schema[$key]);
+                $strings[$key] = $value;
             }
         }
 
