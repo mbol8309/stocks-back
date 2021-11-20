@@ -46,6 +46,14 @@ class UserType extends GraphQLType {
             'categories' => [
                 'type'=>Type::listOf(FacadesGraphQL::type('Category')),
                 'description' => 'User categories'
+            ],
+            'roles' => [
+                'type'=>Type::listOf(FacadesGraphQL::type('Role')),
+                'description' => 'User roles'
+            ],
+            'context' => [
+                'type'=>FacadesGraphQL::type('Context'),
+                'description' => 'User context'
             ]
         ];
     }

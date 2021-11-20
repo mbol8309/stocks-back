@@ -1,6 +1,8 @@
 <?php
 namespace App\Traits;
 
+use App\Models\Context;
+use App\Scope\ContextScope;
 
 trait useContext 
 {

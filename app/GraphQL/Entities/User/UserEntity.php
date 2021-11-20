@@ -10,6 +10,8 @@ use App\GraphQL\Entities\User\Queries\UserLoginQuery;
 use App\GraphQL\Entities\User\Queries\UserMeQuery;
 use App\GraphQL\Entities\User\Queries\UserQuery;
 use App\GraphQL\Entities\User\Queries\UsersQuery;
+use App\GraphQL\Entities\User\Types\ContextType;
+use App\GraphQL\Entities\User\Types\RoleType;
 use App\GraphQL\Entities\User\Types\UserType;
 
 class UserEntity extends BaseEntity
@@ -53,7 +55,9 @@ class UserEntity extends BaseEntity
     public static function getTypes(): array
     {
         return [
-            UserType::class
+            UserType::class,
+            RoleType::class,
+            ContextType::class
         ];
     }
 }

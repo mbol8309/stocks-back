@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scope\CategoryScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -51,3 +52,4 @@ Context::saved(function (Context $context) {
     $context->saveQuietly();
     
 });
+Category::addGlobalScope(new CategoryScope);

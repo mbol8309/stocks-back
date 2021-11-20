@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
 use Illuminate\Database\Seeder;
+use Rinvex\Categories\Models\Category;
 
 class CategorySeeder extends Seeder
 {
@@ -14,17 +14,20 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        $category = new Category([
-            'name' => 'Audio'
-        ]);
-        $category->save();
+        $categories = Category::all();
+        foreach($categories as $cat)
+        {
+            if ($cat->root_id == null && $cat->parent_id !=null)
+            {
+                $root = Category::find($cat->parent_id);
+                while($root->parent_id!=null)
+                {
+                    $root = Category::find($root->parent_id);
+                }
+                $cat->root_id = $root->id;
+                $cat->save();
 
-        $category2 = new Category([
-            'name' => 'Reproductoras'
-        ]);
-        $category2->parent()->associate($category);
-        $category2->save();
-        
-
+            }
+        }
     }
 }

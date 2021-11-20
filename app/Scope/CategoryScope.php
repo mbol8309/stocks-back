@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace App\Scope;
 
 use App\Models\Context;
 use Illuminate\Database\Eloquent\Scope;
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
-class ContextScope implements Scope
+class CategoryScope implements Scope
 {
     /**
      * Apply the scope to a given Eloquent query builder.
@@ -20,12 +20,13 @@ class ContextScope implements Scope
     public function apply(Builder $builder, Model $model)
     {
         $user = Auth::user();
-        if ($user != null) {
-            $context_id = $user->context_id;
-            $global_context = Context::where('name','global')->first();
-            if ($context_id != $global_context->id){
-                $builder->where('context_id', $context_id);
+        if ($user !=null){
+            $context = Context::find($user->context_id);
+            if ($context != null){
+                $bc = $context->categories()->withoutGlobalScope(CategoryScope::class)->first();
+                $builder->where('root_id',$bc->id);
             }
+
         }
     }
 }
