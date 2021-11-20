@@ -15,6 +15,7 @@
         "league/fractal": "^0.19.2",
         "rebing/graphql-laravel": "^7.2",
         "rinvex/laravel-categories": "^5.0",
+        "santigarcor/laratrust": "^6.3",
         "spatie/laravel-fractal": "^5.8"
     },
     "require-dev": {
