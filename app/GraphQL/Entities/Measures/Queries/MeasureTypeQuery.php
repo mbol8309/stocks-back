@@ -19,33 +19,26 @@ class MeasureTypeQuery extends Query
         'name'  => 'measuretype',
     ];
 
-    public function type(): Type
+    public function __construct()
     {
-        return GraphQL::type('MeasureType');
-    }
-
-    protected function rules(array $args = []): array
-    {
-        return [
+        $this->rules = [
             'id' => [
                 'required', 'numeric'
             ]
         ];
-    }
 
-    public function args(): array
-    {
-        return [
+        $this->args = [
             'id' => [
                 'name' => 'id',
                 'type' => Type::int()
             ]
         ];
+        $this->type = GraphQL::type('MeasureType');
     }
 
     public function resolve($root, $args, $user, ?SelectFields $fields)
     {
-        
+         
         $m = MeasurementType::findOrFail($args['id']);
         return $m;
     }

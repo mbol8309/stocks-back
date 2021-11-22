@@ -15,14 +15,9 @@ class CreateUserMutation extends Mutation
         'name' => 'createUser'
     ];
 
-    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
+    public function __construct()
     {
-        return true;
-    }
-
-    public function rules(array $args = []):array
-    {
-        return [
+        $this->rules = [
             'name' => [
                 'required', 'max:50'
             ],
@@ -36,16 +31,8 @@ class CreateUserMutation extends Mutation
                 'sometimes', 'array', 'exists:categories,id'
             ]
         ];
-    }
 
-    public function type() : Type
-    {
-        return GraphQL::type('User');
-    }
-
-    public function args():array
-    {
-        return [
+        $this->args = [
             'name' => [
                 'name' => 'name',
                 'type' =>  Type::nonNull(Type::string()),
@@ -59,10 +46,11 @@ class CreateUserMutation extends Mutation
                 'type' =>  Type::nonNull(Type::string()),
             ],
             'categories' => [
-                'name' => 'Categories',
-                'type' => Type::listOf(GraphQL::type('Category'))
+                'name' => 'categories',
+                'type' => Type::listOf(Type::int())
             ]
         ];
+        $this->type = GraphQL::type('User');
     }
 
     public function resolve($root, $args)

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\GraphQL\Entities\Category\Mutations;
 
 use App\GraphQL\Mutations\Mutation;
@@ -16,14 +17,9 @@ class CreateCategoryMutation extends Mutation
         'name' => 'createCategory'
     ];
 
-    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
+    public function __construct()
     {
-        return true;
-    }
-
-    public function rules(array $args = []):array
-    {
-        return [
+        $this->rules = [
             'name' => [
                 'required', 'max:50'
             ],
@@ -31,16 +27,8 @@ class CreateCategoryMutation extends Mutation
                 'integer', 'exists:categories,id'
             ]
         ];
-    }
 
-    public function type() : Type
-    {
-        return GraphQL::type('Category');
-    }
-
-    public function args():array
-    {
-        return [
+        $this->args = [
             'name' => [
                 'name' => 'name',
                 'type' =>  Type::nonNull(Type::string()),
@@ -50,6 +38,7 @@ class CreateCategoryMutation extends Mutation
                 'type' => Type::int(),
             ]
         ];
+        $this->type = GraphQL::type('Category');
     }
 
     public function resolve($root, $args)
@@ -57,8 +46,7 @@ class CreateCategoryMutation extends Mutation
         $category = new Category();
         $category->fill($args);
 
-        if (isset($args['parent']))
-        {
+        if (isset($args['parent'])) {
             $category->parent_id = $args['parent'];
         } else {
             $category->makeRoot();

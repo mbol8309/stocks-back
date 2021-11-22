@@ -15,34 +15,22 @@ class DeleteUserMutation extends Mutation
         'name' => 'deleteUser',
         'description' => 'Delete a user'
     ];
-    
-    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
-    {
-        return true;
-    }
-    
-    public function type() :Type
-    {
-        return Type::boolean();
-    }
 
-    public function rules(array $args = []):array
+    public function __construct()
     {
-        return [
+        $this->rules = [
             'id' => [
                 'required', 'numeric', 'min:1', 'exists:users,id'
             ],
         ];
-    }
 
-    public function args():array
-    {
-        return [
+        $this->args = [
             'id' => [
                 'name' => 'id',
                 'type' => Type::int()
             ]
         ];
+        $this->type = Type::boolean();
     }
 
     public function resolve($root, $args)

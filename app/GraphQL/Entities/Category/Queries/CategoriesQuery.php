@@ -18,26 +18,13 @@ class CategoriesQuery extends Query {
         'name'  => 'categories',
     ];
 
-    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
+    public function __construct()
     {
-        return true;
-    }
+        $this->paginate=true;
+        $this->rules = [];
 
-    public function type(): Type
-    {
-        return Type::listOf(GraphQL::type('Category')); //retrieve a single user
-    }
-
-    protected function rules(array $args = []): array
-    {
-        return [
-        ];
-    }
-
-    public function args(): array
-    {
-        return [
-        ];
+        $this->args = [];
+        $this->type = GraphQL::paginate(GraphQL::type('Category'));
     }
 
     public function resolve($root, $args, $user, ?SelectFields $fields)
@@ -52,7 +39,7 @@ class CategoriesQuery extends Query {
             }*/
 
         }
-        return Category::all();//whereIn('id',$ids)->get();
+        return $this->basePaginate(Category::query());//whereIn('id',$ids)->get();
     }
 
 }

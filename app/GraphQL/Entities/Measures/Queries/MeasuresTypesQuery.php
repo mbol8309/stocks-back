@@ -1,4 +1,5 @@
 <?php
+
 namespace App\GraphQL\Entities\Measures\Queries;
 
 use App\GraphQL\Queries\Query;
@@ -11,20 +12,16 @@ use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class MeasuresTypesQuery extends Query {
+class MeasuresTypesQuery extends Query
+{
 
     protected $attributes = [
         'name'  => 'measurestypes',
     ];
-
-    public function type(): Type
+    public function __construct()
     {
-        return Type::listOf(GraphQL::type('MeasureType')); 
-    }
-
-    protected function rules(array $args = []): array
-    {
-        return [
+        $this->paginate = true;
+        $this->rules = [
             'ids' => [
                 'array',
             ],
@@ -32,25 +29,29 @@ class MeasuresTypesQuery extends Query {
                 'numeric',
             ]
         ];
-    }
 
-    public function args(): array
-    {
-        return [
+        $this->args = [
             'ids'   => [
                 'name' => 'ids',
                 'type' => Type::listOf(Type::int()),
-            ],
+            ]
         ];
+        $this->type = GraphQL::paginate(GraphQL::type('MeasureType'));
     }
 
     public function resolve($root, $args, $user, ?SelectFields $fields)
     {
-        if (isset($args['ids'])) {
-            return MeasurementType::find($args['ids']);
-        } else {
-            return MeasurementType::all();
-        }
-    }
 
+        $measures = MeasurementType::query();
+        if (isset($args['ids'])) {
+            $measures->with($fields->getRelations())
+            ->select($fields->getSelect())->whereIn('id',$args['ids']);
+        } else {
+            $measures->with($fields->getRelations())
+            ->select($fields->getSelect());
+        }
+
+        $measures = $this->basePaginate($measures, $args);
+        return $measures;
+    }
 }

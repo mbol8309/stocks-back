@@ -31,7 +31,7 @@ class UserLoginQuery extends Query
     protected function rules(array $args = []): array
     {
         return [
-            'email' => [
+            'username' => [
                 'required',
                 'string',
                 'min:1',
@@ -46,8 +46,8 @@ class UserLoginQuery extends Query
     public function args(): array
     {
         return [
-            'email'    => [
-                'name' => 'email',
+            'username'    => [
+                'name' => 'username',
                 'type' => Type::string(),
             ],
             'password' => [
@@ -59,7 +59,7 @@ class UserLoginQuery extends Query
 
     public function resolve($root, $args, ?SelectFields $fields)
     {
-        $user = User::where('email', $args['email'])->first();
+        $user = User::where('email', $args['username'])->first();
         if ($user && Hash::check($args['password'], $user->password)) {
             $user['token'] = $user->createToken('access')->accessToken;
             return $user;

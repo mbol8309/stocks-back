@@ -16,14 +16,9 @@ class UpdateUserMutation extends Mutation
         'name' => 'updateUser'
     ];
 
-    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
+    public function __construct()
     {
-        return true;
-    }
-
-    public function rules(array $args = []): array
-    {
-        return [
+        $this->rules = [
             'id' => [
                 'required', 'numeric', 'min:1', 'exists:users,id'
             ],
@@ -31,7 +26,7 @@ class UpdateUserMutation extends Mutation
                 'required', 'max:50'
             ],
             'email' => [
-                'required', 'email', 'unique:users,email,' . $args['id'],
+                'required', 'email', 'unique:users,email,id',
             ],
             'password' => [
                 'sometimes', 'string', 'min:5'
@@ -40,16 +35,8 @@ class UpdateUserMutation extends Mutation
                 'sometimes', 'array', 'exists:categories,id'
             ]
         ];
-    }
 
-    public function type(): Type
-    {
-        return GraphQL::type('User');
-    }
-
-    public function args(): array
-    {
-        return [
+        $this->args = [
             'id' => [
                 'name' => 'id',
                 'type' =>  Type::nonNull(Type::int()),
@@ -71,6 +58,7 @@ class UpdateUserMutation extends Mutation
                 'type' => Type::listOf(Type::int())
             ]
         ];
+        $this->type = GraphQL::type('User');
     }
 
     public function resolve($root, $args)
@@ -78,8 +66,7 @@ class UpdateUserMutation extends Mutation
         $user = User::findOrFail($args['id']);
         $user->fill($args);
 
-        if (isset($args['categories']))
-        {
+        if (isset($args['categories'])) {
             $user->syncCategories($args['categories']);
         }
         $user->save();

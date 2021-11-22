@@ -1,4 +1,5 @@
 <?php
+
 namespace App\GraphQL\Entities\Category\Queries;
 
 use App\GraphQL\Queries\Query;
@@ -10,47 +11,34 @@ use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class CategoryQuery extends Query {
+class CategoryQuery extends Query
+{
 
     protected $attributes = [
         'name'  => 'category',
     ];
 
-    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
+    public function __construct()
     {
-        return true;
-    }
-
-    public function type(): Type
-    {
-        return GraphQL::type('Category'); //retrieve a single user
-    }
-
-    protected function rules(array $args = []): array
-    {
-        return [
+        $this->rules = [
             'id' => [
                 'required',
                 'numeric',
-                'min:1',
-                'exists:categories,id'
+                'min:1'
             ],
         ];
-    }
 
-    public function args(): array
-    {
-        return [
+        $this->args = [
             'id'    => [
                 'name' => 'id',
                 'type' => Type::int(),
             ],
         ];
+        $this->type = GraphQL::type('Category');
     }
 
-    public function resolve($root, $args,$user, ?SelectFields $fields)
+    public function resolve($root, $args, $user, ?SelectFields $fields)
     {
         return Category::findOrFail($args['id']);
     }
-
 }

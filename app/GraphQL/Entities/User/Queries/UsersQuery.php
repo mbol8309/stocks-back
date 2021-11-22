@@ -1,4 +1,5 @@
 <?php
+
 namespace App\GraphQL\Entities\User\Queries;
 
 use App\GraphQL\Queries\Query;
@@ -9,30 +10,17 @@ use App\Models\User;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 
-class UsersQuery extends Query {
+class UsersQuery extends Query
+{
 
     protected $attributes = [
         'name'  => 'users',
     ];
 
-    public function type(): Type
+    public function __construct()
     {
-        return Type::listOf(GraphQL::type('User')); //retrieve a collection of users
-    }
-
-    public function args():array
-    {
-        return [
-            'ids'   => [
-                'name' => 'ids',
-                'type' => Type::listOf(Type::int()),
-            ],
-        ];
-    }
-
-    protected function rules(array $args = []): array
-    {
-        return [
+        $this->paginate = true;
+        $this->rules = [
             'ids' => [
                 'array',
             ],
@@ -40,14 +28,28 @@ class UsersQuery extends Query {
                 'numeric',
             ]
         ];
+
+        $this->args = [
+            'ids'   => [
+                'name' => 'ids',
+                'type' => Type::listOf(Type::int()),
+            ]
+        ];
+        $this->type = GraphQL::paginate(GraphQL::type('User'));
     }
 
-    public function resolve($root, $args)
+    public function resolve($root, $args, $context, ResolveInfo $info, Closure $getSelectFields)
     {
+        $fields = $getSelectFields();
+        $users = User::query();
         if (isset($args['ids'])) {
-            return User::find($args['ids']);
+            $users->find($args['ids']);
         }
+        $users->with($fields->getRelations())
+            ->select($fields->getSelect());
+        
+        $users = $this->basePaginate($users,$args);
 
-        return User::all();
+        return $users;
     }
 }

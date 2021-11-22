@@ -19,21 +19,10 @@ class UserMeQuery extends Query
         'description' => 'Asking for current user'
     ];
 
-    public function type(): Type
+    public function __construct()
     {
-        return GraphQL::type('User');
-    }
-
-    public function authorize($root, array $args, $ctx, ?ResolveInfo $resolveInfo = null, ?Closure $getSelectFields = null): bool
-    {
-        return true;
-    }
-
-    public function args(): array
-    {
-        return [
-
-        ];
+        
+        $this->type = GraphQL::type('User');
     }
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)

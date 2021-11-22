@@ -15,31 +15,24 @@ class UserQuery extends Query {
         'name'  => 'user',
     ];
 
-    public function type(): Type
+    public function __construct()
     {
-        return GraphQL::type('User'); //retrieve a single user
-    }
-
-    protected function rules(array $args = []): array
-    {
-        return [
+        $this->rules = [
             'id' => [
                 'required',
                 'numeric',
                 'min:1',
                 'exists:users,id'
-            ],
+            ]
         ];
-    }
 
-    public function args(): array
-    {
-        return [
+        $this->args = [
             'id'    => [
                 'name' => 'id',
                 'type' => Type::int(),
-            ],
+            ]
         ];
+        $this->type = GraphQL::type('User');
     }
 
     public function resolve($root, $args, User $user, ?SelectFields $fields)
