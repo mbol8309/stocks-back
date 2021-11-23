@@ -53,6 +53,11 @@ class User extends Authenticatable
         $this->attributes['password'] = bcrypt($password);
     }
 
+    public function context()
+    {
+        return $this->belongsTo(Context::class,'context_id');
+    }
+
 
 
     public $token  = null;

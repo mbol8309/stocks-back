@@ -14,8 +14,4 @@ class Team extends LaratrustTeam
         return $this->hasOne(Context::class,'team_id');
     }
 
-    public function roles()
-    {
-
-    }
 }

@@ -13,6 +13,8 @@ class Context extends Model
 {
     use HasFactory, SoftDeletes, Categorizable;
 
+    protected $fillable = ['name'];
+
     public function users()
     {
         return $this->hasMany(User::class, 'context_id', 'id');
@@ -26,6 +28,11 @@ class Context extends Model
     public function team(){
         return $this->belongsTo(Team::class,'team_id');
     }
+
+    public static function globalContext()
+    {
+        return Context::where('name','global')->first();
+    }
 }
 
 Context::saved(function (Context $context) {
@@ -33,6 +40,8 @@ Context::saved(function (Context $context) {
     
     if ($context->BaseCategory() == null) {
         //base Category
+
+        //$rid = Context::globalContext()->BaseCategory();
         $c = new Category([
             'name' => 'RootCategory-' . $context->id,
         ]);

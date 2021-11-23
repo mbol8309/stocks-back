@@ -82,7 +82,7 @@ class ContextSeeder extends Seeder
 
         foreach ($users as $user) {
             if ($user->roles()->count() == 0){
-                $user->attachRoles([$role],Team::where('name','global')->first());
+                $user->attachRole($role,Team::where('name','global')->first());
             }
         }
         
