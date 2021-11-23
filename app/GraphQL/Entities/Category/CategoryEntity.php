@@ -4,6 +4,7 @@ namespace App\GraphQL\Entities\Category;
 
 use App\GraphQL\Entities\BaseEntity;
 use App\GraphQL\Entities\Category\Mutations\CreateCategoryMutation;
+use App\GraphQL\Entities\Category\Mutations\UpdateCategoryMutation;
 use App\GraphQL\Entities\Category\Queries\CategoriesQuery;
 use App\GraphQL\Entities\Category\Queries\CategoryQuery;
 use App\GraphQL\Entities\Category\Types\CategoryType;
@@ -20,6 +21,7 @@ class CategoryEntity extends BaseEntity
                 ],
                 'mutation' => [
                     'createCategory' => CreateCategoryMutation::class,
+                    'updateCategory' => UpdateCategoryMutation::class,
                 ],
                 'types' => [
                     

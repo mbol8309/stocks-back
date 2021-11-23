@@ -4,6 +4,7 @@ namespace App\GraphQL\Entities\Warehouse;
 
 use App\GraphQL\Entities\BaseEntity;
 use App\GraphQL\Entities\Warehouse\Mutations\CreateWarehouseMutation;
+use App\GraphQL\Entities\Warehouse\Mutations\DeleteWarehouseMutation;
 use App\GraphQL\Entities\Warehouse\Mutations\UpdateWarehouseMutation;
 use App\GraphQL\Entities\Warehouse\Queries\WarehouseQuery;
 use App\GraphQL\Entities\Warehouse\Queries\WarehousesQuery;
@@ -21,7 +22,8 @@ class WarehouseEntity extends BaseEntity
                 ],
                 'mutation' => [
                     'createWarehouse' => CreateWarehouseMutation::class,
-                    'updateWarehouse' => UpdateWarehouseMutation::class
+                    'updateWarehouse' => UpdateWarehouseMutation::class,
+                    'deleteWarehouse' => DeleteWarehouseMutation::class
                 ],
                 'types' => [
                     
