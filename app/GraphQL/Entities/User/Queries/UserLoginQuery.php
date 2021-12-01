@@ -7,8 +7,10 @@ use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\SelectFields;
 use App\Models\User;
 use Closure;
+use Exception;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class UserLoginQuery extends Query
@@ -63,6 +65,10 @@ class UserLoginQuery extends Query
         if ($user && Hash::check($args['password'], $user->password)) {
             $user['token'] = $user->createToken('access')->accessToken;
             return $user;
+        } else {
+            return Response::json([
+                'message' => 'Bad user or password'
+            ],403);
         }
     }
 }
