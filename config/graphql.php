@@ -163,7 +163,8 @@ return [
     //     'message' => '',
     //     'locations' => []
     // ]
-    'error_formatter' => [\Rebing\GraphQL\GraphQL::class, 'formatError'],
+    'error_formatter' => [App\GraphQL\Exceptions\StocksErrorFormatter::class,'formatError'],
+    //[\Rebing\GraphQL\GraphQL::class, 'formatError'],
 
     /*
      * Custom Error Handling

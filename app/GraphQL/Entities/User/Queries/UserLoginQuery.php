@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Entities\User\Queries;
 
+use App\GraphQL\Exceptions\StocksExceptions;
 use App\GraphQL\Queries\Query;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\SelectFields;
@@ -64,11 +65,8 @@ class UserLoginQuery extends Query
         $user = User::where('email', $args['username'])->first();
         if ($user && Hash::check($args['password'], $user->password)) {
             $user['token'] = $user->createToken('access')->accessToken;
-            return $user;
         } else {
-            return Response::json([
-                'message' => 'Bad user or password'
-            ],403);
+            throw new StocksExceptions('Bad user or password');
         }
     }
 }
