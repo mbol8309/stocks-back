@@ -1,6 +1,6 @@
 <?php
 
-namespace App\GraphQL\Entities\User\Queries;
+namespace App\GraphQL\Entities\User\Mutations;
 
 use App\GraphQL\Exceptions\StocksExceptions;
 use App\GraphQL\Queries\Query;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class UserLoginQuery extends Query
+class UserLoginMutation extends Query
 {
 
     protected $attributes = [
@@ -65,8 +65,10 @@ class UserLoginQuery extends Query
         $user = User::where('email', $args['username'])->first();
         if ($user && Hash::check($args['password'], $user->password)) {
             $user['token'] = $user->createToken('access')->accessToken;
+            return $user;
         } else {
             throw new StocksExceptions('Bad user or password');
         }
+        
     }
 }

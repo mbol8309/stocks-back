@@ -7,6 +7,7 @@ use App\GraphQL\Entities\User\Mutations\CreateUserMutation;
 use App\GraphQL\Entities\User\Mutations\DeleteUserMutation;
 use App\GraphQL\Entities\User\Mutations\RegisterUserMutation;
 use App\GraphQL\Entities\User\Mutations\UpdateUserMutation;
+use App\GraphQL\Entities\User\Mutations\UserLoginMutation;
 use App\GraphQL\Entities\User\Queries\UserLoginQuery;
 use App\GraphQL\Entities\User\Queries\UserMeQuery;
 use App\GraphQL\Entities\User\Queries\UserQuery;
@@ -43,10 +44,11 @@ class UserEntity extends BaseEntity
             ],
             'login' => [
                 'query' => [
-                    'login' => UserLoginQuery::class,
+                    
                 ],
                 'mutation' => [
-                    'registerUser' => RegisterUserMutation::class
+                    'registerUser' => RegisterUserMutation::class,
+                    'login' => UserLoginMutation::class,
                 ],
                 'types' => [],
                 'middleware' => ['api'],
