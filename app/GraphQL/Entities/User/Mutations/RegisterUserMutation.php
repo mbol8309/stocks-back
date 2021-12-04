@@ -61,7 +61,7 @@ class RegisterUserMutation extends Mutation
     public function resolve($root, $args)
     {
         $user = null;
-        DB::transaction(function() use ($args, &$user){
+        DB::transaction(function () use ($args, &$user) {
             $user = new User();
             $user->fill($args);
             $user->save();
@@ -72,12 +72,23 @@ class RegisterUserMutation extends Mutation
             $user->context()->associate($context->id);
             $role = Role::AdminRole();
             $team = Team::find($context->team_id);
-    
-            $user->attachRole($role,$team );
+
+            $user->attachRole($role, $team);
             return $user;
         });
 
+        if ($user) {
+            $user['token'] = $user->createToken('access')->accessToken;
+        }
+
         return $user;
-        
     }
+
+    public function validationErrorMessages(array $args = []): array
+{
+    return [
+        'password.confirmed' => 'Password must be confirmed',
+    ];
+}
+ 
 }
